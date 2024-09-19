@@ -1,7 +1,15 @@
 export default function Modules() {
     return (
         <div>
-            {/* TODO: Implement Collapse All button, View Progress button, etc. */}
+            <button type="button">Collapse All</button>
+            <button type="button">View Progress</button>
+            <select>
+                <option selected value="PUBLISH_ALL">
+                    Publish All
+                </option>
+                <option value="PUBLISH">Publish</option>
+            </select>
+            <button type="button">+ Module</button>
             <ul id="wd-modules">
                 <li className="wd-module">
                     <div className="wd-title">Week 1</div>
