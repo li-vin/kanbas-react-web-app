@@ -15,7 +15,7 @@ export default function AssignmentEditor() {
                 id="wd-description"
                 style={{ height: "300px" }}
             >
-                {/*"The assignment is available online. 
+                The assignment is available online. 
                 
                 Submit a link to the landing page of your Web application running on Netlify. The landing
                 page should include the following: 
@@ -24,7 +24,7 @@ export default function AssignmentEditor() {
                 application 
                 Links to all relevant source code repositories 
                 The Kanbas application should include a link to navigate back to the
-                landing page."*/}
+                landing page.
             </textarea>
             <div className="row mb-3">
                 <label

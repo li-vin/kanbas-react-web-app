@@ -211,7 +211,6 @@ export default function Lab1() {
                         value="Wonderland"
                         title="The last name"
                     />
-                    {/* copy rest of form elements here  */}
                 </form>
             </div>
             <div id="wd-textarea">
