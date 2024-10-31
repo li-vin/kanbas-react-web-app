@@ -1,5 +1,5 @@
 const hello = () => {
-    alert("Hello WOrld!");
+    alert("Hello World!");
 };
 const lifeIs = (good: string) => {
     alert(`Life is ${good}`);
