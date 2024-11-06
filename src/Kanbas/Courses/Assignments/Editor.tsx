@@ -1,9 +1,21 @@
 import { useParams } from "react-router";
 import * as db from "../../Database";
+import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { addAssignment, updateAssignment } from "./reducer";
 export default function AssignmentEditor() {
-    const { aid } = useParams();
-    const assignments = db.assignments;
-    const assignment = assignments.find((assignment) => assignment._id === aid);
+    const { cid, aid } = useParams();
+    const { assignments } = useSelector(
+        (state: any) => state.assignmentsReducer
+    );
+    const [assignment, setAssignment] = useState<any>(
+        assignments.find((assignment: any) => assignment._id === aid) ?? {
+            _id: aid,
+            course: cid,
+        }
+    );
+    const dispatch = useDispatch();
     return (
         <div id="wd-assignments-editor">
             <label htmlFor="wd-name" className="form-label">
@@ -14,20 +26,22 @@ export default function AssignmentEditor() {
                 id="wd-name"
                 className="form-control mb-3"
                 value={assignment?.title}
+                onChange={(e) => {
+                    setAssignment({ ...assignment, title: e.target.value });
+                }}
             />
             <textarea
                 className="form-control mb-3"
                 id="wd-description"
                 style={{ height: "300px" }}
-            >
-                The assignment is available online. Submit a link to the landing
-                page of your Web application running on Netlify. The landing
-                page should include the following: Your full name and section
-                Links to each of the lab assignments Link to the Kanbas
-                application Links to all relevant source code repositories The
-                Kanbas application should include a link to navigate back to the
-                landing page.
-            </textarea>
+                value={assignment?.description}
+                onChange={(e) => {
+                    setAssignment({
+                        ...assignment,
+                        description: e.target.value,
+                    });
+                }}
+            ></textarea>
             <div className="row mb-3">
                 <label
                     htmlFor="wd-points"
@@ -40,7 +54,13 @@ export default function AssignmentEditor() {
                         type="number"
                         className="form-control"
                         id="wd=points"
-                        value={100}
+                        value={assignment?.points}
+                        onChange={(e) => {
+                            setAssignment({
+                                ...assignment,
+                                points: e.target.value,
+                            });
+                        }}
                     />
                 </div>
             </div>
@@ -187,7 +207,13 @@ export default function AssignmentEditor() {
                         type="date"
                         id="wd-due-date"
                         className="form-control mb-3"
-                        value="2024-05-13"
+                        value={assignment?.due_date}
+                        onChange={(e) => {
+                            setAssignment({
+                                ...assignment,
+                                due_date: e.target.value,
+                            });
+                        }}
                     />
                     <div className="d-flex">
                         <div className="flex-fill me-2">
@@ -201,7 +227,13 @@ export default function AssignmentEditor() {
                                 type="date"
                                 id="wd-available-from"
                                 className="form-control mb-3"
-                                value="2024-05-06"
+                                value={assignment?.available_from}
+                                onChange={(e) => {
+                                    setAssignment({
+                                        ...assignment,
+                                        available_from: e.target.value,
+                                    });
+                                }}
                             />
                         </div>
                         <div className="flex-fill">
@@ -215,7 +247,13 @@ export default function AssignmentEditor() {
                                 type="date"
                                 id="wd-available-from"
                                 className="form-control mb-3"
-                                value="2024-05-28"
+                                value={assignment?.available_to}
+                                onChange={(e) => {
+                                    setAssignment({
+                                        ...assignment,
+                                        available_to: e.target.value,
+                                    });
+                                }}
                             />
                         </div>
                     </div>
@@ -223,15 +261,27 @@ export default function AssignmentEditor() {
             </div>
             <hr />
             <div className="d-flex justify-content-end">
-                <button
+                <Link
                     type="button"
                     className="btn btn-outline-secondary me-1"
+                    to={"../Assignments"}
                 >
                     Cancel
-                </button>
-                <button type="button" className="btn btn-danger">
+                </Link>
+                <Link
+                    type="button"
+                    className="btn btn-danger"
+                    to={"../Assignments"}
+                    onClick={() => {
+                        console.log(assignment);
+                        assignments.find((a: any) => a._id === aid)
+                            ? dispatch(updateAssignment(assignment))
+                            : dispatch(addAssignment(assignment));
+                        console.log(assignments);
+                    }}
+                >
                     Save
-                </button>
+                </Link>
             </div>
         </div>
     );

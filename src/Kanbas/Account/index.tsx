@@ -3,7 +3,9 @@ import Profile from "./Profile";
 import Signin from "./Signin";
 import Signup from "./Signup";
 import AccountNavigation from "./Navigation";
+import { useSelector } from "react-redux";
 export default function Account() {
+    const { currentUser } = useSelector((state: any) => state.accountReducer);
     return (
         <div id="wd-account-screen">
             <table>
@@ -16,7 +18,9 @@ export default function Account() {
                             <Route
                                 path="/"
                                 element={
-                                    <Navigate to="/Kanbas/Account/Signin" />
+                                    <Navigate
+                                        to={currentUser ? "Profile" : "Signin"}
+                                    />
                                 }
                             />
                             <Route path="/Signin" element={<Signin />} />
