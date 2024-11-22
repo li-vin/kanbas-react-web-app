@@ -1,14 +1,10 @@
 import { BsGripVertical } from "react-icons/bs";
 import { Link, useParams } from "react-router-dom";
-import AssignmentControlButtons from "./AssignmentControlButtons";
 import AssignmentsControlButtons from "./AssignmentsControlButtons";
 import { IoSearch } from "react-icons/io5";
-import * as db from "../../Database";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { FaTrash } from "react-icons/fa6";
 import DeleteAssignment from "./DeleteAssignment";
-import { deleteModule } from "../Modules/reducer";
-import { deleteAssignment } from "./reducer";
 import { useState } from "react";
 
 export default function Assignments() {

@@ -1,7 +1,6 @@
 import { IoEllipsisVertical } from "react-icons/io5";
 import { FaTrash, FaPencil, FaPlus } from "react-icons/fa6";
 import GreenCheckmark from "./GreenCheckmark";
-import { useSelector } from "react-redux";
 export default function ModuleControlButtons({
     moduleId,
     deleteModule,

@@ -3,7 +3,6 @@ import LessonControlButtons from "./LessonControlButtons";
 import ModuleControlButtons from "./ModuleControlButtons";
 import ModulesControls from "./ModulesControls";
 import { BsGripVertical } from "react-icons/bs";
-import * as db from "../../Database";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addModule, deleteModule, editModule, updateModule } from "./reducer";
