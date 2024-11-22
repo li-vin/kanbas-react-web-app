@@ -4,10 +4,20 @@ import AssignmentControlButtons from "./AssignmentControlButtons";
 import AssignmentsControlButtons from "./AssignmentsControlButtons";
 import { IoSearch } from "react-icons/io5";
 import * as db from "../../Database";
+import { useDispatch, useSelector } from "react-redux";
+import { FaTrash } from "react-icons/fa6";
+import DeleteAssignment from "./DeleteAssignment";
+import { deleteModule } from "../Modules/reducer";
+import { deleteAssignment } from "./reducer";
+import { useState } from "react";
 
 export default function Assignments() {
     const { cid } = useParams();
-    const assignments = db.assignments;
+    const { assignments } = useSelector(
+        (state: any) => state.assignmentsReducer
+    );
+    const { currentUser } = useSelector((state: any) => state.accountReducer);
+    const [assignmentToDelete, setAssignmentToDelete] = useState<any>();
     return (
         <div id="wd-assignments">
             <div className="d-flex justify-content-end mb-2">
@@ -29,20 +39,25 @@ export default function Assignments() {
                         placeholder="Search..."
                     />
                 </div>
-                <button
-                    type="button"
-                    id="wd-add-assignment-group"
-                    className="btn btn-outline-secondary text-nowrap ms-1"
-                >
-                    + Group
-                </button>
-                <button
-                    type="button"
-                    id="wd-add-assignment-group"
-                    className="btn btn-danger text-nowrap ms-1"
-                >
-                    + Assignment
-                </button>
+
+                {currentUser.role === "FACULTY" && (
+                    <>
+                        <button
+                            type="button"
+                            id="wd-add-assignment-group"
+                            className="btn btn-outline-secondary text-nowrap ms-1"
+                        >
+                            + Group
+                        </button>
+                        <Link
+                            id="wd-add-assignment-group"
+                            className="btn btn-danger text-nowrap ms-1"
+                            to={new Date().getTime().toString()}
+                        >
+                            + Assignment
+                        </Link>
+                    </>
+                )}
             </div>
             <div className="wd-title p-0 mb-5 fs-5 border-gray">
                 <div
@@ -51,7 +66,9 @@ export default function Assignments() {
                 >
                     <BsGripVertical className="me-2 fs-3" />
                     ASSIGNMENTS
-                    <AssignmentsControlButtons />
+                    {currentUser.role === "FACULTY" && (
+                        <AssignmentsControlButtons />
+                    )}
                 </div>
                 <ul
                     id="wd-assignment-list"
@@ -60,14 +77,17 @@ export default function Assignments() {
                     {assignments
                         .filter((assignment: any) => assignment.course === cid)
                         .map((assignment: any) => (
-                            <li className="wd-assignment-list-item list-group-item p-3 ps-1 d-flex align-items-center">
+                            <li
+                                className="wd-assignment-list-item list-group-item p-3 ps-1 d-flex align-items-center"
+                                key={assignment._id}
+                            >
                                 <BsGripVertical className="me-2 fs-3" />
                                 <div className="d-flex flex-column flex-fill">
                                     <Link
                                         className="text-black fw-semibold link-underline link-underline-opacity-0"
                                         to={`${assignment._id}`}
                                     >
-                                        {assignment._id} {assignment.title}
+                                        {assignment.title}
                                     </Link>
                                     <div className="fs-6">
                                         <b className="text-danger">
@@ -80,10 +100,19 @@ export default function Assignments() {
                                         <b>Due</b> May 13 at 11:59 | 100 pts
                                     </div>
                                 </div>
+                                <FaTrash
+                                    id="wd-delete_assignment-btn"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#wd-delete-assignment-dialogue"
+                                    onClick={() =>
+                                        setAssignmentToDelete(assignment)
+                                    }
+                                />
                             </li>
                         ))}
                 </ul>
             </div>
+            <DeleteAssignment assignment={assignmentToDelete} />
         </div>
     );
 }
