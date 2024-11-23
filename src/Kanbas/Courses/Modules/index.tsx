@@ -87,7 +87,9 @@ export default function Modules() {
                             {currentUser.role === "FACULTY" && (
                                 <ModuleControlButtons
                                     moduleId={module._id}
-                                    deleteModule={(moduleId) => removeModule}
+                                    deleteModule={(moduleId) =>
+                                        removeModule(moduleId)
+                                    }
                                     editModule={(moduleId) => {
                                         dispatch(editModule(moduleId));
                                     }}
