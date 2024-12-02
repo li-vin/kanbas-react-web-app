@@ -13,6 +13,9 @@ import { useSelector } from "react-redux";
 
 export default function Kanbas() {
     const { currentUser } = useSelector((state: any) => state.accountReducer);
+    const { enrollments } = useSelector(
+        (state: any) => state.enrollmentsReducer
+    );
     const [courses, setCourses] = useState<any[]>([]);
     const [course, setCourse] = useState<any>({
         _id: "0",
@@ -34,7 +37,8 @@ export default function Kanbas() {
     };
     useEffect(() => {
         fetchCourses();
-    }, [currentUser]);
+        console.log("updated my courses");
+    }, [currentUser, enrollments]);
 
     const addNewCourse = async () => {
         const newCourse = await userClient.createCourse(course);
