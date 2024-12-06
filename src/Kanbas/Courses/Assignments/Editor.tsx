@@ -1,9 +1,12 @@
 import { useParams } from "react-router";
-import * as db from "../../Database";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { addAssignment, updateAssignment } from "./reducer";
+import * as assignmentsClient from "./client";
+import * as coursesClient from "../client";
+import { create } from "domain";
+
 export default function AssignmentEditor() {
     const { cid, aid } = useParams();
     const { assignments } = useSelector(
@@ -16,6 +19,20 @@ export default function AssignmentEditor() {
         }
     );
     const dispatch = useDispatch();
+
+    const saveAssignment = async (assignment: any) => {
+        await assignmentsClient.updateAssignment(assignment);
+        dispatch(updateAssignment(assignment));
+    };
+    const createAssignment = async (newAssignment: any) => {
+        if (!cid) return;
+        const assignment = await coursesClient.createAssignmentForCourse(
+            cid,
+            newAssignment
+        );
+        dispatch(addAssignment(assignment));
+    };
+
     return (
         <div id="wd-assignments-editor">
             <label htmlFor="wd-name" className="form-label">
@@ -275,8 +292,8 @@ export default function AssignmentEditor() {
                     onClick={() => {
                         console.log(assignment);
                         assignments.find((a: any) => a._id === aid)
-                            ? dispatch(updateAssignment(assignment))
-                            : dispatch(addAssignment(assignment));
+                            ? saveAssignment(assignment)
+                            : createAssignment(assignment);
                         console.log(assignments);
                     }}
                 >

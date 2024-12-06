@@ -1,15 +1,13 @@
 import { BsGripVertical } from "react-icons/bs";
 import { Link, useParams } from "react-router-dom";
-import AssignmentControlButtons from "./AssignmentControlButtons";
 import AssignmentsControlButtons from "./AssignmentsControlButtons";
 import { IoSearch } from "react-icons/io5";
-import * as db from "../../Database";
 import { useDispatch, useSelector } from "react-redux";
 import { FaTrash } from "react-icons/fa6";
 import DeleteAssignment from "./DeleteAssignment";
-import { deleteModule } from "../Modules/reducer";
-import { deleteAssignment } from "./reducer";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import * as coursesClient from "../client";
+import { setAssignments } from "./reducer";
 
 export default function Assignments() {
     const { cid } = useParams();
@@ -18,6 +16,18 @@ export default function Assignments() {
     );
     const { currentUser } = useSelector((state: any) => state.accountReducer);
     const [assignmentToDelete, setAssignmentToDelete] = useState<any>();
+    const dispatch = useDispatch();
+
+    const fetchAssignments = async () => {
+        const assignments = await coursesClient.findAssignmentsForCourse(
+            cid as string
+        );
+        dispatch(setAssignments(assignments));
+    };
+    useEffect(() => {
+        fetchAssignments();
+    }, []);
+
     return (
         <div id="wd-assignments">
             <div className="d-flex justify-content-end mb-2">
@@ -74,42 +84,40 @@ export default function Assignments() {
                     id="wd-assignment-list"
                     className="wd-lessons list-group rounded-0"
                 >
-                    {assignments
-                        .filter((assignment: any) => assignment.course === cid)
-                        .map((assignment: any) => (
-                            <li
-                                className="wd-assignment-list-item list-group-item p-3 ps-1 d-flex align-items-center"
-                                key={assignment._id}
-                            >
-                                <BsGripVertical className="me-2 fs-3" />
-                                <div className="d-flex flex-column flex-fill">
-                                    <Link
-                                        className="text-black fw-semibold link-underline link-underline-opacity-0"
-                                        to={`${assignment._id}`}
-                                    >
-                                        {assignment.title}
-                                    </Link>
-                                    <div className="fs-6">
-                                        <b className="text-danger">
-                                            Multiple Modules
-                                        </b>{" "}
-                                        | <b>Not available until</b> May 6 at
-                                        12:00 am |
-                                    </div>
-                                    <div className="fs-6">
-                                        <b>Due</b> May 13 at 11:59 | 100 pts
-                                    </div>
+                    {assignments.map((assignment: any) => (
+                        <li
+                            className="wd-assignment-list-item list-group-item p-3 ps-1 d-flex align-items-center"
+                            key={assignment._id}
+                        >
+                            <BsGripVertical className="me-2 fs-3" />
+                            <div className="d-flex flex-column flex-fill">
+                                <Link
+                                    className="text-black fw-semibold link-underline link-underline-opacity-0"
+                                    to={`${assignment._id}`}
+                                >
+                                    {assignment.title}
+                                </Link>
+                                <div className="fs-6">
+                                    <b className="text-danger">
+                                        Multiple Modules
+                                    </b>{" "}
+                                    | <b>Not available until</b> May 6 at 12:00
+                                    am |
                                 </div>
-                                <FaTrash
-                                    id="wd-delete_assignment-btn"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#wd-delete-assignment-dialogue"
-                                    onClick={() =>
-                                        setAssignmentToDelete(assignment)
-                                    }
-                                />
-                            </li>
-                        ))}
+                                <div className="fs-6">
+                                    <b>Due</b> May 13 at 11:59 | 100 pts
+                                </div>
+                            </div>
+                            <FaTrash
+                                id="wd-delete_assignment-btn"
+                                data-bs-toggle="modal"
+                                data-bs-target="#wd-delete-assignment-dialogue"
+                                onClick={() =>
+                                    setAssignmentToDelete(assignment)
+                                }
+                            />
+                        </li>
+                    ))}
                 </ul>
             </div>
             <DeleteAssignment assignment={assignmentToDelete} />
