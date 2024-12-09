@@ -1,8 +1,10 @@
 import { FaUserCircle } from "react-icons/fa";
 import PeopleDetails from "./Details";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 export default function PeopleTable({ users = [] }: { users?: any[] }) {
+    const { pathname } = useLocation();
+
     return (
         <div id="wd-people-table">
             <PeopleDetails />
@@ -21,18 +23,27 @@ export default function PeopleTable({ users = [] }: { users?: any[] }) {
                     {users.map((user: any) => (
                         <tr key={user._id}>
                             <td className="wd-full-name text-nowrap">
-                                <Link
-                                    to={`/Kanbas/Account/Users/${user._id}`}
-                                    className="text-decoration-none"
-                                >
-                                    <FaUserCircle className="me-2 fs-1 text-secondary" />
-                                    <span className="wd-first-name">
-                                        {user.firstName}{" "}
-                                    </span>
-                                    <span className="wd-last-name">
-                                        {user.lastName}
-                                    </span>
-                                </Link>
+                                {pathname.includes("User") ? (
+                                    <Link
+                                        to={`/Kanbas/Account/Users/${user._id}`}
+                                        className="text-decoration-none"
+                                    >
+                                        <FaUserCircle className="me-2 fs-1 text-secondary" />
+                                        <span className="wd-first-name">
+                                            {user.firstName}{" "}
+                                        </span>
+                                        <span className="wd-last-name">
+                                            {user.lastName}
+                                        </span>
+                                    </Link>
+                                ) : (
+                                    <div>
+                                        <FaUserCircle className="me-2 fs-1 text-secondary" />
+                                        <span>
+                                            {user.firstName} {user.lastName}
+                                        </span>
+                                    </div>
+                                )}
                             </td>
                             <td className="wd-login-id">{user.loginId}</td>
                             <td className="wd-section">{user.section}</td>
