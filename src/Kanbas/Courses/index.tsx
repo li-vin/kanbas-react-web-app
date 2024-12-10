@@ -14,6 +14,7 @@ import { FaAlignJustify } from "react-icons/fa";
 import PeopleTable from "./People/Table";
 import { useEffect, useState } from "react";
 import * as courseClient from "./client";
+import Quizzes from "./Quizzes";
 
 export default function Courses({ courses }: { courses: any[] }) {
     const { cid } = useParams();
@@ -54,6 +55,7 @@ export default function Courses({ courses }: { courses: any[] }) {
                             path="Assignments/:aid"
                             element={<AssignmentEditor />}
                         />
+                        <Route path="Quizzes" element={<Quizzes />} />
                         <Route
                             path="People"
                             element={<PeopleTable users={users} />}

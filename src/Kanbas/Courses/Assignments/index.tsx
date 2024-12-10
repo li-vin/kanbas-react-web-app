@@ -24,6 +24,7 @@ export default function Assignments() {
         );
         dispatch(setAssignments(assignments));
     };
+
     useEffect(() => {
         fetchAssignments();
     }, []);
@@ -93,7 +94,11 @@ export default function Assignments() {
                             <div className="d-flex flex-column flex-fill">
                                 <Link
                                     className="text-black fw-semibold link-underline link-underline-opacity-0"
-                                    to={`${assignment._id}`}
+                                    to={
+                                        currentUser.role === "STUDENT"
+                                            ? ""
+                                            : `${assignment._id}`
+                                    }
                                 >
                                     {assignment.title}
                                 </Link>
@@ -108,14 +113,16 @@ export default function Assignments() {
                                     <b>Due</b> May 13 at 11:59 | 100 pts
                                 </div>
                             </div>
-                            <FaTrash
-                                id="wd-delete_assignment-btn"
-                                data-bs-toggle="modal"
-                                data-bs-target="#wd-delete-assignment-dialogue"
-                                onClick={() =>
-                                    setAssignmentToDelete(assignment)
-                                }
-                            />
+                            {currentUser.role !== "STUDENT" && (
+                                <FaTrash
+                                    id="wd-delete_assignment-btn"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#wd-delete-assignment-dialogue"
+                                    onClick={(e) =>
+                                        setAssignmentToDelete(assignment)
+                                    }
+                                />
+                            )}
                         </li>
                     ))}
                 </ul>
