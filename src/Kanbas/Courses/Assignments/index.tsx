@@ -51,7 +51,7 @@ export default function Assignments() {
                     />
                 </div>
 
-                {currentUser.role === "FACULTY" && (
+                {currentUser.role !== "STUDENT" && (
                     <>
                         <button
                             type="button"
@@ -77,7 +77,7 @@ export default function Assignments() {
                 >
                     <BsGripVertical className="me-2 fs-3" />
                     ASSIGNMENTS
-                    {currentUser.role === "FACULTY" && (
+                    {currentUser.role !== "STUDENT" && (
                         <AssignmentsControlButtons />
                     )}
                 </div>

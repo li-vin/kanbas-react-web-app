@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import { addAssignment, updateAssignment } from "./reducer";
 import * as assignmentsClient from "./client";
 import * as coursesClient from "../client";
-import { create } from "domain";
 
 export default function AssignmentEditor() {
     const { cid, aid } = useParams();
