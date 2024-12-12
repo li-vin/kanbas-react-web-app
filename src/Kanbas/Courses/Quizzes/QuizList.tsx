@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 import { IoSearch } from "react-icons/io5";
 import * as quizzesClient from "./client";
 
-export default function Quizzes() {
+export default function QuizList() {
     const { quizzes } = useSelector((state: any) => state.quizzesReducer);
     const { currentUser } = useSelector((state: any) => state.accountReducer);
     const { cid } = useParams();
@@ -122,6 +122,7 @@ export default function Quizzes() {
                         <button
                             id="wd-add-quiz-group"
                             className="btn btn-danger text-nowrap ms-1"
+                            // to={new Date().getTime().toString()}
                             onClick={() => createQuiz()}
                         >
                             + Quiz

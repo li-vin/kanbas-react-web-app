@@ -11,6 +11,8 @@ export default function Details() {
     const { cid, qid } = useParams();
     const { quizzes } = useSelector((state: any) => state.quizzesReducer);
     const { currentUser } = useSelector((state: any) => state.accountReducer);
+    const [attempts, setAttempts] = useState(0);
+    const [score, setScore] = useState(0);
     const [quiz, setQuiz] = useState<any>(
         quizzes.find((quiz: any) => quiz._id === qid && quiz.course === cid)
     );
@@ -23,8 +25,24 @@ export default function Details() {
             quizzes.find((quiz: any) => quiz._id === qid && quiz.course === cid)
         );
     };
+    const fetchQuizAttempts = async () => {
+        const attempts = await quizzesClient.fetchUserAttempts(
+            currentUser._id,
+            qid as string
+        );
+        setAttempts(attempts);
+    };
+    const fetchScore = async () => {
+        const score = await quizzesClient.fetchUserScoreForQuiz(
+            currentUser._id,
+            qid as string
+        );
+        setScore(score);
+    };
     useEffect(() => {
         fetchQuizzes();
+        fetchQuizAttempts();
+        fetchScore();
     }, []);
 
     const boolToYN = (bool: boolean) => {
@@ -59,9 +77,12 @@ export default function Details() {
             {currentUser.role !== "STUDENT" && (
                 <div className="row me-3">
                     <div className="col">
-                        <button className="btn btn-secondary col float-end">
+                        <Link
+                            className="btn btn-secondary col float-end"
+                            to="Quiz"
+                        >
                             Preview
-                        </button>
+                        </Link>
                     </div>
                     <div className="col">
                         <Link className="btn btn-secondary col" to="Editor">
@@ -81,7 +102,7 @@ export default function Details() {
                     {quizDetail("Time Limit", quiz.timeMin + " Minutes")}
                     {quizDetail(
                         "Multiple Attempts",
-                        boolToYN(quiz.attempts >= 1)
+                        boolToYN(quiz.attempts > 1)
                     )}
                     {quiz.attempts >= 1 &&
                         quizDetail("Attempts", quiz.attempts)}
@@ -109,13 +130,21 @@ export default function Details() {
                 </div>
             ) : (
                 <div>
-                    <p>{quiz.description}</p>
+                    <span
+                        dangerouslySetInnerHTML={{ __html: quiz.description }}
+                    ></span>
+                    <br />
+                    {attempts >= quiz.attempts && (
+                        <span className="text-danger">No more attempts</span>
+                    )}
+                    <br />
                     <Link
-                        to="Quiz"
-                        className="btn btn-danger position-relative start-50"
+                        to={attempts >= quiz.attempts ? "" : "Quiz"}
+                        className="btn btn-danger position-relative start-50 translate-middle mt-4"
                     >
                         Start
                     </Link>
+                    <br />
                     <br />
                     <br />
                 </div>

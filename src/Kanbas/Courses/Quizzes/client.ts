@@ -16,3 +16,41 @@ export const updateQuiz = async (quiz: any) => {
     );
     return data;
 };
+
+export const createQuestionForQuiz = async (quizId: string, question: any) => {
+    const response = await axiosWithCredentials.post(
+        `${QUIZZES_API}/${quizId}/questions`,
+        question
+    );
+    return response.data;
+};
+export const findQuestionsForQuiz = async (quizId: string) => {
+    const response = await axiosWithCredentials.get(
+        `${QUIZZES_API}/${quizId}/questions`
+    );
+    return response.data;
+};
+
+export const submitAttempt = async (
+    userId: string,
+    quizId: string,
+    answers: any
+) => {
+    const response = await axiosWithCredentials.post(
+        `${QUIZZES_API}/${quizId}/${userId}/attempts`,
+        answers
+    );
+    return response.data;
+};
+export const fetchUserAttempts = async (userId: string, quizId: string) => {
+    const response = await axiosWithCredentials.get(
+        `${QUIZZES_API}/${quizId}/${userId}/attempts`
+    );
+    return response.data;
+};
+export const fetchUserScoreForQuiz = async (userId: string, quizId: string) => {
+    const response = await axiosWithCredentials.get(
+        `${QUIZZES_API}/${quizId}/${userId}/score`
+    );
+    return response.data;
+};

@@ -57,7 +57,7 @@ export default function AssignmentEditor() {
                         description: e.target.value,
                     });
                 }}
-            ></textarea>
+            />
             <div className="row mb-3">
                 <label
                     htmlFor="wd-points"

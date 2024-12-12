@@ -1,15 +1,17 @@
 import { useState } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router";
+import QuizList from "./QuizList";
+import DetailsEditor from "./DetailsEditor";
+import QuestionsList from "./Questions/QuestionList";
 
 export default function QuizEditor() {
     const [editQuestions, setEditQuestions] = useState(false);
-    const { pathname } = useLocation();
     return (
         <div>
             <button
                 className={`btn btn-${
                     editQuestions ? "outline-" : ""
-                }secondary me-1`}
+                }secondary me-1 mb-4`}
                 onClick={() => setEditQuestions(false)}
             >
                 Details
@@ -17,16 +19,12 @@ export default function QuizEditor() {
             <button
                 className={`btn btn-${
                     editQuestions ? "" : "outline-"
-                }secondary me-1`}
+                }secondary me-1 mb-4`}
                 onClick={() => setEditQuestions(true)}
             >
                 Questions
             </button>
-            <Routes>
-                <Route path="/" element={<Navigate to="Questions" />} />
-                <Route path="Details" element={<hr />} />
-                <Route path="Questions" element={<div>Questions</div>} />
-            </Routes>
+            {editQuestions ? <QuestionsList /> : <DetailsEditor />}
         </div>
     );
 }
